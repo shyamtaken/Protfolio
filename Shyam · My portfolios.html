@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shyam · My portfolios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef1f5;--surface:#fff;--ink:#14213d;--muted:#55627a;--line:#d3d9e3;--accent:#0b6e6e;--focus:#1d4ed8;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1626;--surface:#17203a;--ink:#e8edf7;--muted:#9aa8c4;--line:#2a3658;--accent:#5ed0c7;--focus:#8ab4ff}}
+:root[data-theme="dark"]{--bg:#0f1626;--surface:#17203a;--ink:#e8edf7;--muted:#9aa8c4;--line:#2a3658;--accent:#5ed0c7;--focus:#8ab4ff}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","Instrument Sans",system-ui,sans-serif;line-height:1.1;margin:0}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+header{padding:56px 0 28px}
+.eyebrow{color:var(--muted);margin:0 0 10px;font-weight:500}
+h1{font-size:clamp(2.4rem,8vw,4.2rem);font-weight:800;letter-spacing:-.02em}
+.lede{max-width:56ch;margin:18px 0 0;color:var(--muted);font-size:1.08rem}
+h2{font-size:1.6rem;font-weight:800;margin:36px 0 16px}
+ul.grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+a.card{display:flex;flex-direction:column;gap:8px;height:100%;padding:22px 22px 20px;background:var(--surface);border:1px solid var(--line);border-top:6px solid var(--accent);border-radius:10px;text-decoration:none;color:inherit;transition:transform .15s ease,border-color .15s ease}
+a.card:hover{transform:translateY(-3px);border-color:var(--accent)}
+.cat{font-size:.82rem;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.06em}
+.card h3{font-size:1.5rem;font-weight:800}
+.card p{margin:0;color:var(--muted)}
+.stats{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:6px;font-size:.92rem;color:var(--muted)}
+.stats b{font:800 1.3rem "Bricolage Grotesque",sans-serif;color:var(--ink);margin-right:4px}
+.go{margin-top:auto;padding-top:12px;font-weight:600;color:var(--accent)}
+.soon{display:flex;flex-direction:column;justify-content:center;height:100%;min-height:150px;padding:22px;border:1.5px dashed var(--line);border-radius:10px;color:var(--muted);text-align:center}
+footer{padding:48px 0 56px}
+.contact{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+.contact a{padding:11px 20px;border-radius:8px;border:1.5px solid var(--ink);text-decoration:none;font-weight:600;min-height:44px;color:var(--ink)}
+.contact a:first-child{background:var(--ink);color:var(--bg)}
+@media (prefers-reduced-motion:reduce){a.card{transition:none}a.card:hover{transform:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p class="eyebrow" id="eyebrow"></p>
+  <h1 id="name"></h1>
+  <p class="lede" id="lede"></p>
+</header>
+<main>
+  <h2>Pick a category</h2>
+  <ul class="grid" id="grid"></ul>
+</main>
+<footer>
+  <h2>Get in touch</h2>
+  <div class="contact" id="contact"></div>
+</footer>
+</div>
+
+<script>
+/* To add a portfolio, copy one block in PORTFOLIOS and change its text and url. */
+const SITE = {
+  name: "Shyam",
+  eyebrow: "My work, sorted by category",
+  lede: "Each card opens a separate portfolio for that kind of work. Choose the one you’re interested in.",
+  links: [
+    { label: "Roblox profile", url: "https://www.roblox.com/share?code=565212eed378784f87fc003d9dc72a92&type=Profile&source=ProfileShare&stamp=1794736108202" },
+    { label: "Discord", url: "https://discord.com/users/1355224578926051671" }
+  ]
+};
+const PORTFOLIOS = [
+  { category: "Game testing", title: "Roblox tester", desc: "Every Roblox game I’ve tested through QA Central, paid and voluntary.",
+    stats: [["20", "tests"], ["15", "paid"], ["5", "voluntary"]],
+    url: "https://shyamtaken.github.io/Protfolio/tester" }
+];
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+$("name").textContent = SITE.name;
+$("eyebrow").textContent = SITE.eyebrow;
+$("lede").textContent = SITE.lede;
+$("contact").innerHTML = SITE.links.map(l => '<a href="' + esc(l.url) + '" target="_blank" rel="noopener">' + esc(l.label) + "</a>").join("");
+$("grid").innerHTML = PORTFOLIOS.map(p =>
+  '<li><a class="card" href="' + esc(p.url) + '" target="_blank" rel="noopener"><span class="cat">' + esc(p.category) + "</span><h3>" + esc(p.title) + "</h3><p>" + esc(p.desc) + '</p><div class="stats">' +
+  p.stats.map(s => "<span><b>" + esc(s[0]) + "</b>" + esc(s[1]) + "</span>").join("") + '</div><span class="go">View portfolio →</span></a></li>'
+).join("") + '<li><div class="soon">More portfolios coming soon</div></li>';
+</script>
+</body>
+</html>
