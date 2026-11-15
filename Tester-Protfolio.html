@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shyam · Roblox tester portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef1f5;--surface:#fff;--ink:#14213d;--muted:#55627a;--line:#d3d9e3;--paid:#0b6e6e;--paid-bg:#d9f0ee;--vol:#7a3b8f;--vol-bg:#f0e1f6;--focus:#1d4ed8;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1626;--surface:#17203a;--ink:#e8edf7;--muted:#9aa8c4;--line:#2a3658;--paid:#5ed0c7;--paid-bg:#123c44;--vol:#d9a6ee;--vol-bg:#3a2250;--focus:#8ab4ff}}
+:root[data-theme="dark"]{--bg:#0f1626;--surface:#17203a;--ink:#e8edf7;--muted:#9aa8c4;--line:#2a3658;--paid:#5ed0c7;--paid-bg:#123c44;--vol:#d9a6ee;--vol-bg:#3a2250;--focus:#8ab4ff}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","Instrument Sans",system-ui,sans-serif;line-height:1.1;margin:0}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+header.hero{padding:56px 0 32px}
+.role{color:var(--muted);margin:0 0 10px;font-weight:500}
+h1{font-size:clamp(2.4rem,8vw,4.2rem);font-weight:800;letter-spacing:-.02em}
+.about{max-width:60ch;margin:18px 0 0;color:var(--muted);font-size:1.08rem}
+.split{margin-top:34px}
+.bar{display:flex;height:22px;border-radius:6px;overflow:hidden;background:var(--line)}
+.bar div{height:100%;transition:width .6s ease}
+.bar .p{background:var(--paid)}.bar .v{background:var(--vol)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:14px}
+.legend b{font:800 2rem/1 "Bricolage Grotesque",sans-serif;margin-right:8px}
+.legend span{display:inline-flex;align-items:baseline;color:var(--muted)}
+.legend .lp b{color:var(--paid)}.legend .lv b{color:var(--vol)}
+.legend .lt b{color:var(--ink)}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:36px 0 18px}
+.filters button{font:500 .95rem "Instrument Sans",sans-serif;padding:8px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;min-height:40px}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+h2{font-size:1.6rem;font-weight:800}
+.src{color:var(--muted);font-size:.92rem;margin:8px 0 0}
+ul.log{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.entry{height:100%;background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--paid);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.entry.vol{border-left-color:var(--vol)}
+.entry h3{font-size:1.15rem;font-weight:600;overflow-wrap:anywhere}
+.meta{color:var(--muted);font-size:.92rem;overflow-wrap:anywhere}
+.badge{font-size:.82rem;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--paid-bg);color:var(--paid);margin-top:auto}
+.vol .badge{background:var(--vol-bg);color:var(--vol)}
+.empty{padding:28px;text-align:center;color:var(--muted);border:1.5px dashed var(--line);border-radius:8px;grid-column:1/-1}
+footer{padding:48px 0 56px}
+.contact{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+.contact a{padding:11px 20px;border-radius:8px;border:1.5px solid var(--ink);text-decoration:none;font-weight:600;min-height:44px}
+.contact a:first-child{background:var(--ink);color:var(--bg)}
+@media (prefers-reduced-motion:reduce){.bar div{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <p class="role" id="role"></p>
+  <h1 id="name"></h1>
+  <p class="about" id="about"></p>
+  <div class="split" aria-label="Paid versus voluntary tests">
+    <div class="bar" id="bar"></div>
+    <div class="legend" id="legend"></div>
+  </div>
+</header>
+
+<main>
+  <h2>Test log</h2>
+  <p class="src" id="src"></p>
+  <div class="filters" id="filters" role="group" aria-label="Filter tests"></div>
+  <ul class="log" id="log"></ul>
+</main>
+
+<footer>
+  <h2>Need a tester?</h2>
+  <p class="about" id="cta"></p>
+  <div class="contact" id="contact"></div>
+</footer>
+</div>
+
+<script>
+const PROFILE = {
+  name: "Shyam",
+  role: "Roblox game tester · shyam_053 on QA Central",
+  about: "I test Roblox games for developers through QA Central. Below is every game I’ve been credited on, whether I was paid or tested as a volunteer.",
+  cta: "Open to paid Roblox playtests, QA contracts and beta testing for developers and studios.",
+  source: "From my QA Central tester résumé, generated 15 Nov 2026.",
+  links: [{ label: "Roblox profile", url: "https://www.roblox.com/share?code=565212eed378784f87fc003d9dc72a92&type=Profile&source=ProfileShare&stamp=1794736108202" }, { label: "Discord", url: "https://discord.com/users/1355224578926051671" }]
+};
+// [game, creator, type]
+const TESTS = [
+  ["+1 Chainsaw Man evolution", "mujiTABA1", "paid"],
+  ["+1 mythical creatures", "Syr_gamer10", "paid"],
+  ["+1 Plane War", "ArielDevs", "paid"],
+  ["2D Bomb Tag", "b7py", "paid"],
+  ["Backroad Mudding", "StormMulti", "paid"],
+  ["Banana Exchange", "ToastLTD", "paid"],
+  ["BOUNCE ON FISH!", "Marguatz", "paid"],
+  ["Collect Anime Cards", "grimlyyyy", "paid"],
+  ["Eat All The Slime!", "unprevailedd", "paid"],
+  ["Eat Jelly To Escape", "gabrolyrbx", "paid"],
+  ["Hunt for Animal", "NNNapalm", "paid"],
+  ["Scrap Hop", "T0nkus", "paid"],
+  ["Sound the Alarms", "DreamRPGame", "paid"],
+  ["Sword Legends", "Stjoin1", "paid"],
+  ["Ultimate Showdown", "bigometer10000000000", "paid"],
+  ["+1 Ninja Legend", "NickieGaming", "voluntary"],
+  ["DashMania", "Oaksine7779", "voluntary"],
+  ["Fashion Takeover", "SimplyGameOn", "voluntary"],
+  ["Redline", "Noos3y", "voluntary"],
+  ["Undercover Anime", "Knikt92", "voluntary"]
+].map(r => ({ title: r[0], by: r[1], type: r[2] }));
+
+const $ = id => document.getElementById(id);
+let filter = "all";
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function header(){
+  $("role").textContent = PROFILE.role;
+  $("name").textContent = PROFILE.name;
+  $("about").textContent = PROFILE.about;
+  $("cta").textContent = PROFILE.cta;
+  $("src").textContent = PROFILE.source;
+  const paid = TESTS.filter(t => t.type === "paid").length, vol = TESTS.length - paid, n = TESTS.length || 1;
+  $("bar").innerHTML = '<div class="p" style="width:' + paid / n * 100 + '%"></div><div class="v" style="width:' + vol / n * 100 + '%"></div>';
+  $("legend").innerHTML = '<span class="lt"><b>' + TESTS.length + '</b>tests</span><span class="lp"><b>' + paid + '</b>paid</span><span class="lv"><b>' + vol + '</b>voluntary</span>';
+  $("contact").innerHTML = PROFILE.links.map(l => '<a href="' + esc(l.url) + '" target="_blank" rel="noopener">' + esc(l.label) + "</a>").join("");
+}
+
+function filters(){
+  const opts = [["all", "All tests"], ["paid", "Paid"], ["voluntary", "Voluntary"]];
+  $("filters").innerHTML = opts.map(o => '<button type="button" data-f="' + o[0] + '" aria-pressed="' + (filter === o[0]) + '">' + o[1] + "</button>").join("");
+  $("filters").querySelectorAll("button").forEach(b => b.onclick = () => { filter = b.dataset.f; filters(); list(); });
+}
+
+function list(){
+  const rows = TESTS.filter(t => filter === "all" || t.type === filter);
+  if (!rows.length) { $("log").innerHTML = '<li class="empty">No ' + filter + " tests yet.</li>"; return; }
+  $("log").innerHTML = rows.map(t =>
+    '<li><div class="entry ' + (t.type === "voluntary" ? "vol" : "paid") + '"><h3>' + esc(t.title) + '</h3><span class="meta">by ' + esc(t.by) + '</span><span class="badge">' + (t.type === "paid" ? "Paid" : "Voluntary") + "</span></div></li>"
+  ).join("");
+}
+header(); filters(); list();
+</script>
+</body>
+</html>
